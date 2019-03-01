@@ -1,14 +1,11 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# yg
-
 [![lifecycle](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
-
 [![CRAN
-status](https://www.r-pkg.org/badges/version/yg)](https://cran.r-project.org/package=yg)
+status](https://www.r-pkg.org/badges/version/readyg)](https://cran.r-project.org/package=readyg)
 
-The yg r package read yeast grower ini-formatted text
+Read, Validate, Simulate and Write YeastGrower (aka ACCESS)
 files.
 
 ## Installation
@@ -16,8 +13,8 @@ files.
 <!-- You can install the released version of yg from [CRAN](https://CRAN.R-project.org) with: -->
 
 ``` r
-install.packages("yg") # not yet.
-remotes::install_github("npjc/yg")
+install.packages("readyg") # not yet.
+remotes::install_github("npjc/readyg")
 ```
 
 ## Example
@@ -25,7 +22,7 @@ remotes::install_github("npjc/yg")
 This is a basic example which shows you how to solve a common problem:
 
 ``` r
-library(yg)
+library(readyg)
 path <- yg_example('05_09_13_RT1-79_ps1_A_96_T_13.txt')
 d <- read_yg(path)
 ```
