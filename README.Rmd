@@ -1,0 +1,61 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+# yg
+
+[![lifecycle](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
+
+[![CRAN status](https://www.r-pkg.org/badges/version/yg)](https://cran.r-project.org/package=yg)
+
+The yg r package read yeast grower ini-formatted text files.
+
+## Installation
+
+<!-- You can install the released version of yg from [CRAN](https://CRAN.R-project.org) with: -->
+
+``` r
+install.packages("yg") # not yet.
+remotes::install_github("npjc/yg")
+```
+
+## Example
+
+This is a basic example which shows you how to solve a common problem:
+
+```{r example}
+library(yg)
+path <- yg_example('05_09_13_RT1-79_ps1_A_96_T_13.txt')
+d <- read_yg(path)
+```
+
+returns a nested tibble, with info and data sections.
+
+**N.B. yg file names are prefixed with `dd_mm_yy_` and `read_yg()` uses this information to compute the `datetime` variable in the data field**
+
+```{r structure}
+str(d, 1)
+```
+
+data variable has the measurement / growth data:
+
+```{r data}
+d$data[[1]]
+```
+
+info variable has other info:
+
+```{r info}
+dplyr::glimpse(d$info[[1]])
+```
+
