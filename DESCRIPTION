@@ -1,12 +1,16 @@
 Package: yg
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Read, Validate, Simulate and Write YeastGrower Files
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+Authors@R: person("Nicolas", "Coutin", , "nicolas.coutin@gmail.com", c("aut", "cre"), comment = c(ORCID = "0000-0001-9336-226X"))
+Maintainer: Nicolas Coutin <nicolas.coutin@gmail.com>
+Description: The ACCESS high-throughput liquid microbial growth platform uses 
+    YeastGrower as a software interface to the instruments and it writes out 
+    experimental data in a variant of the windows ini format. This package has
+    utilities to parse and validate those files.
 License: What license is it under?
+URL: https://github.com/npjc/yg
+BugReports: https://github.com/npjc/yg/issues
 Encoding: UTF-8
 LazyData: true
 Imports: 
