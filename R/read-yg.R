@@ -22,10 +22,11 @@ read_yg <- function(path, start_date = NULL, tidy_data_section = TRUE) {
 
 
 parse_section <- function(l) {
-    if(is.null(l)){
+    if (is.null(l)) {
         return(NULL)
     }
-    tibble::tibble(key = names(l), value = unlist(l))
+    values <- stringr::str_remove_all(unlist(l), '"') # '"misc"' -> 'misc'
+    tibble::tibble(key = names(l), value = values)
 }
 
 #' read the data sections from ini yg files
@@ -38,7 +39,7 @@ parse_section_data <- function(l, start_date) {
   # FIXME: make tests explicit:
   #     - handles missing data sections (null)
   #     - handles data sections that exist but only have header row
-  if(length(l) < 2){
+  if (is.null(l)) {
     return(NULL)
   }
 
