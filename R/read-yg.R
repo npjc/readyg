@@ -25,8 +25,10 @@ parse_section <- function(l) {
     if (is.null(l)) {
         return(NULL)
     }
+    names <- stringr::str_replace_all(names(l), '([^_])([A-Z][a-z]+)', '\\1_\\2')
+    names <- stringr::str_to_lower(names)
     values <- stringr::str_remove_all(unlist(l), '"') # '"misc"' -> 'misc'
-    tibble::tibble(key = names(l), value = values)
+    tibble::tibble(key = names, value = values)
 }
 
 #' read the data sections from ini yg files
