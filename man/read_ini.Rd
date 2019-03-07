@@ -2,20 +2,21 @@
 % Please edit documentation in R/read-ini.R
 \name{read_ini}
 \alias{read_ini}
-\title{Read ini formatted text file into a nested section-key-value list.}
+\title{Read ini file}
 \usage{
-read_ini(path)
+read_ini(path, omit = NULL, encoding = "UTF-8")
 }
 \arguments{
 \item{path}{<chr> path to file}
+
+\item{omit}{<chr> section name(s) to omit}
+
+\item{encoding}{<chr> defaults to 'UTF-8' encoding.}
 }
 \description{
-This is re-written from the \code{ini::read.ini()} function to use stringr for
-tokenization and matching. This simplifies the source code and makes it
-~3 times faster. It is also strictly reading in UTF-8.
+Compared to \code{ini::read.ini()} is ~4x faster and allows you to omit
+certain sections.
 }
 \details{
-This function is used to parse the yeast grower data.
-
-\code{identical(read_ini(path), read.ini(path))} returns TRUE.
+This function is used internally to parse the yeast grower data ini files.
 }

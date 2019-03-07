@@ -9,6 +9,7 @@ mtp_wells <- function(nrow, ncol, order = c("rowmajor", "colmajor")) {
 
 mtp_labels_from_length <- function(v) {
     switch(EXPR = as.character(length(v)),
+           '6' = mtp_wells(nrow = 2, ncol = 3),
            '24' =  mtp_wells(nrow = 4, ncol = 6),
            '48' = mtp_wells(nrow = 6, ncol = 8),
            '96' = mtp_wells(nrow = 8, ncol = 12),

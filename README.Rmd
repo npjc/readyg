@@ -13,7 +13,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-[![lifecycle](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
+[![lifecycle](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
 [![CRAN status](https://www.r-pkg.org/badges/version/readyg)](https://cran.r-project.org/package=readyg)
 
 Read, Validate, Simulate and Write YeastGrower (aka ACCESS) files.
@@ -23,37 +23,55 @@ Read, Validate, Simulate and Write YeastGrower (aka ACCESS) files.
 <!-- You can install the released version of yg from [CRAN](https://CRAN.R-project.org) with: -->
 
 ``` r
-install.packages("readyg") # not yet.
+# install.packages("readyg") # not yet.
 remotes::install_github("npjc/readyg")
 ```
 
 ## Example
 
-This is a basic example which shows you how to solve a common problem:
+Yeast Grower/ACCESS files are written in windows ini format (*sort-of*). `read_yg()` parses this format and returns the data in a format suitable for analysis or exporting (writing) to a `.csv` files.
 
 ```{r example}
 library(readyg)
-path <- yg_example('05_09_13_RT1-79_ps1_A_96_T_13.txt')
-d <- read_yg(path)
+files <- yg_example_files()
+files[1] # one example file
+d <- read_yg(files[1])
+d
 ```
 
-returns a nested tibble, with info and data sections.
+In the individual sections:
 
-**N.B. yg file names are prefixed with `dd_mm_yy_` and `read_yg()` uses this information to compute the `datetime` variable in the data field**
-
-```{r structure}
-str(d, 1)
+```{r sections}
+d$data
+d$run_params
+d$drug_data
 ```
 
-data variable has the measurement / growth data:
+If you want the information in the other sections , you can use `read_ini()` 
+instead. This parses the ini file into a list:
 
-```{r data}
-d$data[[1]]
+```{r as-ini}
+l <- read_ini(files[1])
+str(l, 1)
 ```
 
-info variable has other info:
+## Additional Info
 
-```{r info}
-dplyr::glimpse(d$info[[1]])
+YeastGrower/ACCESS encodes data in non-standard ways that `read_yg()` corrects:
+
+**data section:**
+
+* the temperature field may be written as `300`, `30`, `30.0` to indicate 30ºC.  
+* the datetime field in the data may be written as ` D0_12:11:10`, `D0 _12:11:10` or `12:11:10` to indicate 12:11:10 on the first day of the run. To indicate what date `D0` is you can provide this as an argument to e.g. `read_yg('path/to/file.txt', start_date = 'YYYY-MM-DD')`.  
+    * N.B. if the datetime field is encoded as `12:11:10` and the run last longer that one day the current results may be erroneous. e.g. `12:11:10, ... , 23:48:17, ... , 00:12:34` would be encoded as the same day. This is the safe default but will provide an option to 'fix' this in the future.  
+* well field: The well field is encoded in row-major order ('standard') for 6,24,96, and 384 well plates but ACCESS uses a custom ordering for 48 well plates. Currently, we remap these to the standard arangement so that the wells names of a 48-well plate follow the standard convention.  
+    * N.B. the drug_data section, if present, can contain a `Well_Alias` field which is currently not checked for this inconsistency. Handle with care if using this information.  
+
+**all the keys**
+
+The Yeast Grower format has some use of nearly 3000 separte keys (fields). To retrieve all of them:
+
+```{r keys-by-section}
+yg_section_keys()
 ```
 

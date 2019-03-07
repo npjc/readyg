@@ -4,10 +4,12 @@
 \alias{read_yg}
 \title{read a yeast grower .txt file into  a tibble}
 \usage{
-read_yg(path)
+read_yg(path, start_date = NULL, tidy_data_section = TRUE)
 }
 \arguments{
 \item{path}{<chr> path to file}
+
+\item{start_date}{<chr> character vector of start date 'YYYY-MM-DD' format.}
 }
 \description{
 read a yeast grower .txt file into  a tibble
