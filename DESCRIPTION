@@ -19,6 +19,8 @@ Imports:
     tibble,
     tidyr,
     dplyr,
-    purrr
+    purrr,
+    rlang,
+    stats
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 6.1.1

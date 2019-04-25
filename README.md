@@ -5,7 +5,7 @@
 [![CRAN
 status](https://www.r-pkg.org/badges/version/readyg)](https://cran.r-project.org/package=readyg)
 
-Read, Validate, Simulate and Write YeastGrower (aka ACCESS)
+Read, ~~Validate~~, ~~Simulate~~ and ~~Write~~ YeastGrower (aka ACCESS)
 files.
 
 ## Installation
@@ -26,10 +26,22 @@ for analysis or exporting (writing) to a `.csv` files.
 ``` r
 library(readyg)
 files <- yg_example_files()
-files[1] # one example file
-#> [1] "/Library/Frameworks/R.framework/Versions/3.5/Resources/library/readyg/extdata/05_09_13_RT1-79_ps1_A_96_T_13.txt"
-d <- read_yg(files[1])
-d
+read_yg(files[1])
+#> # A tibble: 7,872 x 4
+#>    plate well  runtime measure
+#>    <dbl> <chr>   <dbl>   <dbl>
+#>  1     1 A01       984   0.116
+#>  2     1 A01      1868   0.121
+#>  3     1 A01      2746   0.126
+#>  4     1 A01      3622   0.122
+#>  5     1 A01      4499   0.117
+#>  6     1 A01      5375   0.122
+#>  7     1 A01      6252   0.124
+#>  8     1 A01      7128   0.119
+#>  9     1 A01      8004   0.120
+#> 10     1 A01      8881   0.118
+#> # … with 7,862 more rows
+read_yg(files[1], all_fields = TRUE) # full yg has quite a lot of fields...
 #> # A tibble: 1 x 3
 #>   data                 run_params         drug_data        
 #>   <list>               <list>             <list>           
@@ -39,21 +51,22 @@ d
 In the individual sections:
 
 ``` r
+d <- read_yg(files[1], all_fields = TRUE)
 d$data
 #> [[1]]
 #> # A tibble: 7,872 x 5
-#>    well  datetime            runtime value temperature
-#>    <chr> <dttm>                <dbl> <dbl>       <dbl>
-#>  1 A01   2013-09-05 15:36:07     984 0.116        30.1
-#>  2 A01   2013-09-05 15:50:52    1868 0.121        29.8
-#>  3 A01   2013-09-05 16:05:30    2746 0.126        30  
-#>  4 A01   2013-09-05 16:20:06    3622 0.122        29.8
-#>  5 A01   2013-09-05 16:34:42    4499 0.117        30  
-#>  6 A01   2013-09-05 16:49:19    5375 0.122        30  
-#>  7 A01   2013-09-05 17:03:56    6252 0.124        30  
-#>  8 A01   2013-09-05 17:18:32    7128 0.119        30  
-#>  9 A01   2013-09-05 17:33:08    8004 0.120        30  
-#> 10 A01   2013-09-05 17:47:44    8881 0.118        30  
+#>    well  datetime            runtime measure temperature
+#>    <chr> <dttm>                <dbl>   <dbl>       <dbl>
+#>  1 A01   2013-09-05 15:36:07     984   0.116        30.1
+#>  2 A01   2013-09-05 15:50:52    1868   0.121        29.8
+#>  3 A01   2013-09-05 16:05:30    2746   0.126        30  
+#>  4 A01   2013-09-05 16:20:06    3622   0.122        29.8
+#>  5 A01   2013-09-05 16:34:42    4499   0.117        30  
+#>  6 A01   2013-09-05 16:49:19    5375   0.122        30  
+#>  7 A01   2013-09-05 17:03:56    6252   0.124        30  
+#>  8 A01   2013-09-05 17:18:32    7128   0.119        30  
+#>  9 A01   2013-09-05 17:33:08    8004   0.120        30  
+#> 10 A01   2013-09-05 17:47:44    8881   0.118        30  
 #> # … with 7,862 more rows
 d$run_params
 #> [[1]]
@@ -61,14 +74,14 @@ d$run_params
 #>    key              value                
 #>    <chr>            <chr>                
 #>  1 file_origin      reconstructed_from_DB
-#>  2 Comments         no%20comment         
-#>  3 Plate_Size       96                   
-#>  4 Screen_Run_Type  pre_screen_1         
-#>  5 run_ID           A                    
-#>  6 Save_Data_File   RT1-79               
+#>  2 comments         no%20comment         
+#>  3 plate_size       96                   
+#>  4 screen_run_type  pre_screen_1         
+#>  5 run_id           A                    
+#>  6 save_data_file   RT1-79               
 #>  7 run_plate_repeat 1                    
 #>  8 parent_id        ""                   
-#>  9 Strain_Name      ""                   
+#>  9 strain_name      ""                   
 #> 10 media_name       ypd                  
 #> # … with 139 more rows
 d$drug_data
@@ -76,15 +89,15 @@ d$drug_data
 #> # A tibble: 25 x 2
 #>    key              value    
 #>    <chr>            <chr>    
-#>  1 Drug_Plate       none     
-#>  2 Strain_Plate     none     
-#>  3 run_ID           A        
+#>  1 drug_plate       none     
+#>  2 strain_plate     none     
+#>  3 run_id           A        
 #>  4 run_plate_repeat 1        
-#>  5 Parent_ID        ""       
+#>  5 parent_id        ""       
 #>  6 user             elisa_ubc
-#>  7 Project_Name     elisa_ubc
+#>  7 project_name     elisa_ubc
 #>  8 media_name       ypd      
-#>  9 Quarter          A        
+#>  9 quarter          A        
 #> 10 time_frm_freezer -1       
 #> # … with 15 more rows
 ```

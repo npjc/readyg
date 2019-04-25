@@ -1,17 +1,27 @@
 #' read a yeast grower .txt file into  a tibble
 #'
-#' @param path <chr> path to file
-#' @param start_date <chr> character vector of start date 'YYYY-MM-DD' format.
+#' @param file `<chr>` path to file
+#' @param all_fields `<lgl>` should all fields be output?
+#' @param start_date `<chr>` start date 'YYYY-MM-DD' format.
+#' @param tidy_data_section `<lgl>`should the data section be tidied?
+#'
 #' @export
-read_yg <- function(path, start_date = NULL, tidy_data_section = TRUE) {
-    l <- read_ini(path, omit = omitted_yg_sections())
+read_yg <- function(file, all_fields = FALSE, start_date = NULL,
+                    tidy_data_section = TRUE) {
+    l <- read_ini(file, omit = omitted_yg_sections())
     run_params <- parse_section(l[["Run_Parameters"]])
     drug_data <- parse_section(l[["Drug_Data"]])
 
-    start_date <- start_date %||% start_date_from_filename(path)
+    start_date <- start_date %||% start_date_from_filename(file)
     data <- parse_section_data(l[["Data:"]], start_date)
     if (tidy_data_section) {
       data <- tidy_data_section(data)
+    }
+    if (!all_fields) {
+      d <- dplyr::mutate(data, plate = 1)
+      d <- dplyr::select(d, .data$plate, .data$well, .data$runtime,
+                         .data$measure)
+      return(d)
     }
     out <- list(
         data = list(data),
@@ -49,20 +59,28 @@ parse_section_data <- function(l, start_date) {
     col_names <- col_names_from_header_line(l[[1]])
     d <- readr::read_tsv(s, skip = 1, col_names = col_names)
 
-    d <- dplyr::mutate(d, datetime = fix_datetime(datetime, start_date))
-    d <- dplyr::mutate(d, temperature = fix_temperature(temperature))
+    d <- dplyr::mutate(d, datetime = fix_datetime(.data$datetime, start_date))
+    d <- dplyr::mutate(d, temperature = fix_temperature(.data$temperature))
     d
 }
 
-#' FIXME: turn these into actual test cases:
-#' can_fix <- c('300', '30.1')
+#' fix inconsistently encoded temperatures: `'300'` and `'30.0'` made consistent.
+#'
+#' @param v vector of strings to fix
+#' @keywords internal
+#'
 fix_temperature <- function(v) {
   v <- stringr::str_replace(v, '\\.', '')
   as.numeric(stringr::str_replace(v, "^(\\d{2})","\\1\\."))
 }
 
-#' FIXME: turn these into actual test cases:
-#' can_fix <- c("D0 _13:48:51", "D0_13:48:51", "13:48:51")
+#' fix inconsistently encoded datetime
+#' `can_fix <- c("D0 _13:48:51", "D0_13:48:51", "13:48:51")``
+#'
+#' @param v vector of strings to fix
+#' @param start_date start date that corresponds to D0 (day 0).
+#' @keywords internal
+#'
 fix_datetime <- function(v, start_date) {
   v <- as.character(v)
   v <- dplyr::if_else(stringr::str_starts(v, 'D'), v, paste0('D0_', v))
@@ -74,13 +92,15 @@ fix_datetime <- function(v, start_date) {
 }
 
 tidy_data_section <- function(d) {
-  if(is.null(d)){
+  if (is.null(d)) {
     return(NULL)
   }
-  d <- dplyr::group_by(d, datetime, temperature, runtime)
-  d <- tidyr::gather(d, well, value, -datetime, -temperature, -runtime)
+  d <- dplyr::group_by(d, .data$datetime, .data$temperature, .data$runtime)
+  d <- tidyr::gather(d, 'well', 'measure', -.data$datetime, -.data$temperature,
+                     -.data$runtime)
   d <- dplyr::ungroup(d)
-  dplyr::select(d, well, datetime, runtime, value, temperature)
+  dplyr::select(d, .data$well, .data$datetime, .data$runtime, .data$measure,
+                .data$temperature)
 }
 
 start_date_from_filename <- function(path) {
@@ -122,19 +142,21 @@ rename_other_vars <- function(vars) {
     )
 }
 #' the well variables in access are defined in row-major order as standard for
-#' 96 adn 384 well plates but not in 48 well plates where they use a custom
+#' 96 and 384 well plates but not in 48 well plates where they use a custom
 #' labelling. Default to standard i.e. well 1 -> 'A01' but could support
 #' access mapping in the future.
+#'
+#' @keywords internal
 rename_well_vars <- function(well_ids, mapping = c('standard', 'access')) {
     mapping <- match.arg(mapping)
-    if(mapping == 'access')
+    if (mapping == 'access')
         stop('access well mapping is not supported.')
-    mtp_labels_from_length(well_ids)
+    well_labels_from_length(well_ids)
 }
 
 collapse_list <- function(l) {
     pad <- ''
-    if(length(l) == 1){
+    if (length(l) == 1) {
         pad <- '\n'
     }
     paste0(c(unlist(l, use.names = F), pad), collapse = '\n')

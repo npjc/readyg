@@ -2,12 +2,18 @@
 % Please edit documentation in R/read-yg.R
 \name{fix_datetime}
 \alias{fix_datetime}
-\title{FIXME: turn these into actual test cases:
-can_fix <- c("D0 _13:48:51", "D0_13:48:51", "13:48:51")}
+\title{fix inconsistently encoded datetime
+`can_fix <- c("D0 _13:48:51", "D0_13:48:51", "13:48:51")``}
 \usage{
 fix_datetime(v, start_date)
 }
-\description{
-FIXME: turn these into actual test cases:
-can_fix <- c("D0 _13:48:51", "D0_13:48:51", "13:48:51")
+\arguments{
+\item{v}{vector of strings to fix}
+
+\item{start_date}{start date that corresponds to D0 (day 0).}
 }
+\description{
+fix inconsistently encoded datetime
+`can_fix <- c("D0 _13:48:51", "D0_13:48:51", "13:48:51")``
+}
+\keyword{internal}

@@ -3,7 +3,7 @@
 \name{rename_well_vars}
 \alias{rename_well_vars}
 \title{the well variables in access are defined in row-major order as standard for
-96 adn 384 well plates but not in 48 well plates where they use a custom
+96 and 384 well plates but not in 48 well plates where they use a custom
 labelling. Default to standard i.e. well 1 -> 'A01' but could support
 access mapping in the future.}
 \usage{
@@ -11,7 +11,8 @@ rename_well_vars(well_ids, mapping = c("standard", "access"))
 }
 \description{
 the well variables in access are defined in row-major order as standard for
-96 adn 384 well plates but not in 48 well plates where they use a custom
+96 and 384 well plates but not in 48 well plates where they use a custom
 labelling. Default to standard i.e. well 1 -> 'A01' but could support
 access mapping in the future.
 }
+\keyword{internal}

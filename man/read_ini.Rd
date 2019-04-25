@@ -2,16 +2,21 @@
 % Please edit documentation in R/read-ini.R
 \name{read_ini}
 \alias{read_ini}
+\alias{read_ini_section}
 \title{Read ini file}
 \usage{
 read_ini(path, omit = NULL, encoding = "UTF-8")
+
+read_ini_section(path, section, encoding = "UTF-8")
 }
 \arguments{
-\item{path}{<chr> path to file}
+\item{path}{\code{<chr>} path to file}
 
-\item{omit}{<chr> section name(s) to omit}
+\item{omit}{\code{<chr>} section name(s) to omit}
 
-\item{encoding}{<chr> defaults to 'UTF-8' encoding.}
+\item{encoding}{\code{<chr>} defaults to 'UTF-8' encoding.}
+
+\item{section}{\code{<chr>} name of the section to read in}
 }
 \description{
 Compared to \code{ini::read.ini()} is ~4x faster and allows you to omit

@@ -2,12 +2,14 @@
 % Please edit documentation in R/read-yg.R
 \name{fix_temperature}
 \alias{fix_temperature}
-\title{FIXME: turn these into actual test cases:
-can_fix <- c('300', '30.1')}
+\title{fix inconsistently encoded temperatures: \code{'300'} and \code{'30.0'} made consistent.}
 \usage{
 fix_temperature(v)
 }
-\description{
-FIXME: turn these into actual test cases:
-can_fix <- c('300', '30.1')
+\arguments{
+\item{v}{vector of strings to fix}
 }
+\description{
+fix inconsistently encoded temperatures: \code{'300'} and \code{'30.0'} made consistent.
+}
+\keyword{internal}
