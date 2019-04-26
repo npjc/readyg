@@ -82,6 +82,8 @@ fix_temperature <- function(v) {
 #' @keywords internal
 #'
 fix_datetime <- function(v, start_date) {
+  if (is.na(start_date))
+    return(v)
   v <- as.character(v)
   v <- dplyr::if_else(stringr::str_starts(v, 'D'), v, paste0('D0_', v))
   matches <- stringr::str_match(v, "D(\\d+) ?_(.+)")
