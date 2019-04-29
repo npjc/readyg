@@ -18,7 +18,7 @@ read_yg <- function(file, all_fields = FALSE, start_date = NULL,
       data <- tidy_data_section(data)
     }
     if (!all_fields) {
-      d <- dplyr::mutate(data, plate = 1)
+      d <- dplyr::mutate(data, plate = 1L)
       d <- dplyr::select(d, .data$plate, .data$well, .data$runtime,
                          .data$measure)
       return(d)
