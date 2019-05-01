@@ -9,8 +9,6 @@
 read_yg <- function(file, all_fields = FALSE, start_date = NULL,
                     tidy_data_section = TRUE) {
     l <- read_ini(file, omit = omitted_yg_sections())
-    run_params <- parse_section(l[["Run_Parameters"]])
-    drug_data <- parse_section(l[["Drug_Data"]])
 
     start_date <- start_date %||% start_date_from_filename(file)
     data <- parse_section_data(l[["Data:"]], start_date)
@@ -18,11 +16,13 @@ read_yg <- function(file, all_fields = FALSE, start_date = NULL,
       data <- tidy_data_section(data)
     }
     if (!all_fields) {
-      d <- dplyr::mutate(data, plate = 1L)
+      d <- dplyr::mutate(data, plate = '1')
       d <- dplyr::select(d, .data$plate, .data$well, .data$runtime,
                          .data$measure)
       return(d)
     }
+    run_params <- parse_section(l[["Run_Parameters"]])
+    drug_data <- parse_section(l[["Drug_Data"]])
     out <- list(
         data = list(data),
         run_params = list(run_params),
