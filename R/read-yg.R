@@ -153,7 +153,7 @@ rename_well_vars <- function(well_ids, mapping = c('standard', 'access')) {
     mapping <- match.arg(mapping)
     if (mapping == 'access')
         stop('access well mapping is not supported.')
-    well_labels_from_length(well_ids)
+    mtputils::well_labels_from_length(well_ids)
 }
 
 collapse_list <- function(l) {
