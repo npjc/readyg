@@ -22,6 +22,8 @@ Imports:
     purrr,
     rlang,
     stats,
-    mtputils (>= 0.1.0)
+    mtputils (>= 0.1.1)
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 6.1.1
+Remotes:  
+    npjc/mtputils
